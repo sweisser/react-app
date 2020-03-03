@@ -14,6 +14,20 @@ class FoodNutrients extends React.Component {
     this.get_food_nutrients(this.state.food_id);
   }
 
+  handleKeyPress = event => {
+    if (event.key === "ArrowLeft") {
+      this.prev();
+    } else if (event.key === "ArrowRight") {
+      this.next();
+    } else if (event.key === "PageDownRight") {
+      this.prev10();
+    } else if (event.key === "PageUp") {
+      this.next10();
+    } else {
+      console.log("keypress", event.key);
+    }
+  };
+
   render() {
     return (
       <div>
@@ -24,7 +38,11 @@ class FoodNutrients extends React.Component {
             <tbody>
               <tr>
                 <td width="100">
-                  <Button variant="primary" onClick={this.prev}>
+                  <Button
+                    variant="primary"
+                    onClick={this.prev}
+                    onKeyDown={this.handleKeyPress}
+                  >
                     &lt;
                   </Button>
                 </td>
@@ -32,7 +50,11 @@ class FoodNutrients extends React.Component {
                   {this.state.food_id} {this.state.food_nutrients.long_desc}
                 </td>
                 <td width="100">
-                  <Button variant="primary" onClick={this.next}>
+                  <Button
+                    variant="primary"
+                    onClick={this.next}
+                    onKeyDown={this.handleKeyPress}
+                  >
                     &gt;
                   </Button>
                 </td>
@@ -69,7 +91,7 @@ class FoodNutrients extends React.Component {
       return (
         <tbody>
           <tr>
-            <td colspan="3">empty</td>
+            <td colSpan="3">empty</td>
           </tr>
         </tbody>
       );
@@ -93,8 +115,21 @@ class FoodNutrients extends React.Component {
     this.get_food_nutrients(id);
   };
 
+  prev10 = () => {
+    // 1001 is the min food_id in the database.
+    let id = Math.max(this.state.food_id - 10, 1001);
+    this.setState({ food_id: id });
+    this.get_food_nutrients(id);
+  };
+
   next = () => {
     let id = Math.min(this.state.food_id + 1, 93600);
+    this.setState({ food_id: id });
+    this.get_food_nutrients(id);
+  };
+
+  next10 = () => {
+    let id = Math.min(this.state.food_id + 10, 93600);
     this.setState({ food_id: id });
     this.get_food_nutrients(id);
   };
